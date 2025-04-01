@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.entities.User;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.services.UserService;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
-
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
