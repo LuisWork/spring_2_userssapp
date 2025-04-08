@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.entities.User;
-import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.entities.UserRepository;
+import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.request.UserRequest;
+import com.luiszambrano.backend.usersapp.spring_2_usersapp.repositories.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Optional<User> update(User user, Long id) {
+    public Optional<User> update(UserRequest user, Long id) {
         Optional<User> o = this.findById(id);
         User userOptional = null;
         if(o.isPresent()) {
