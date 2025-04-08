@@ -42,8 +42,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             user = new ObjectMapper().readValue(request.getInputStream(), User.class);
             username = user.getUsername();
             password = user.getPassword();
-            logger.info("Username desde request InputStream (raw)" + username);
-            logger.info("Password desde request InputStream (raw)" + password);
+            //logger.info("Username desde request InputStream (raw)" + username);
+            //logger.info("Password desde request InputStream (raw)" + password);
         } catch (StreamReadException e) {
             e.printStackTrace();
         } catch (DatabindException e) {
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("Authorization", "Bearer " + token);
         Map<String, Object> body = new HashMap<>();
         body.put("token", token);
-        body.put("message", String.format(token, "Hola  %s, has iniciado sesion con exito!", username));
+        body.put("message", String.format("Hola %s, has iniciado sesion con exito!", username));
         body.put("username", username);
         response.getWriter().write(new ObjectMapper().writeValueAsString(body));
         response.setStatus(200);
