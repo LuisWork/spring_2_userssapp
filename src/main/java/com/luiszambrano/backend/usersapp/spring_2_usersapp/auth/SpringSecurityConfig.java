@@ -13,7 +13,7 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
-                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
                 .anyRequest().authenticated())
                 .csrf(config -> config.disable())
                 .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -21,6 +21,9 @@ public class SpringSecurityConfig {
     }
 
     /*
+
+    ANTIGUA FORMA (NO USAR (DEPRECATED))
+
      * @Bean
      * SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
      * return http.authorizeHttpRequests()
