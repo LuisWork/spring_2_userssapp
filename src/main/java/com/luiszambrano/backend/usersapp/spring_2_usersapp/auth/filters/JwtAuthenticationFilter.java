@@ -2,6 +2,7 @@ package com.luiszambrano.backend.usersapp.spring_2_usersapp.auth.filters;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,10 +17,13 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.entities.User;
 
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import static com.luiszambrano.backend.usersapp.spring_2_usersapp.auth.TokenJwtConfig.*;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -42,8 +46,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             user = new ObjectMapper().readValue(request.getInputStream(), User.class);
             username = user.getUsername();
             password = user.getPassword();
-            //logger.info("Username desde request InputStream (raw)" + username);
-            //logger.info("Password desde request InputStream (raw)" + password);
         } catch (StreamReadException e) {
             e.printStackTrace();
         } catch (DatabindException e) {
@@ -58,11 +60,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
+                
         String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal())
                 .getUsername();
-        String originalInput = "algun_token_con_alguna_frase_secreta." + username;
-        String token = Base64.getEncoder().encodeToString(originalInput.getBytes());
-        response.addHeader("Authorization", "Bearer " + token);
+
+        String token = Jwts.builder()
+        .setSubject(username)
+        .signWith(SECRET_KEY)
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+        .compact();
+
+        response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
         Map<String, Object> body = new HashMap<>();
         body.put("token", token);
         body.put("message", String.format("Hola %s, has iniciado sesion con exito!", username));
