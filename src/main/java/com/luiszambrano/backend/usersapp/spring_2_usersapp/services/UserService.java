@@ -3,18 +3,19 @@ package com.luiszambrano.backend.usersapp.spring_2_usersapp.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.dto.UserDto;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.entities.User;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.request.UserRequest;
 
 public interface UserService {
 
-    List<User> findAll();
+    List<UserDto> findAll();
 
-    Optional<User> findById(Long id);
+    Optional<UserDto> findById(Long id);
 
-    User save(User user);
+    UserDto save(User user);
 
-    Optional<User> update(UserRequest user, Long id);
+    Optional<UserDto> update(UserRequest user, Long id);
 
     void remove(Long id);
 

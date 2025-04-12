@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.dto.UserDto;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.entities.User;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.models.request.UserRequest;
 import com.luiszambrano.backend.usersapp.spring_2_usersapp.services.UserService;
@@ -34,13 +35,13 @@ public class UserController {
     private UserService service;
 
     @GetMapping
-    public List<User> list() {
+    public List<UserDto> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable Long id) {
-        Optional<User> userOptional = service.findById(id);
+        Optional<UserDto> userOptional = service.findById(id);
         if (userOptional.isPresent()) {
             return ResponseEntity.ok(userOptional.orElseThrow());
         }
@@ -49,7 +50,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return validation(result);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
@@ -57,11 +58,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody UserRequest user, BindingResult result, @PathVariable Long id) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return validation(result);
         }
-        Optional<User> o = service.update(user, id);
-        if(o.isPresent()) {
+        Optional<UserDto> o = service.update(user, id);
+        if (o.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(o.orElseThrow());
         }
         return ResponseEntity.notFound().build();
@@ -69,7 +70,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable Long id) {
-        Optional<User> userOptional = service.findById(id);
+        Optional<UserDto> userOptional = service.findById(id);
         if (userOptional.isPresent()) {
             service.remove(id);
             return ResponseEntity.noContent().build();
